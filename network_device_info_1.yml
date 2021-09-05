@@ -1,0 +1,20 @@
+---
+- hosts: dnac_servers
+  vars_files:
+    - credentials.yml
+  gather_facts: no
+  tasks:
+  - name: get all network device info
+    cisco.dnac.network_device_info:
+      dnac_host: "{{dnac_host}}"
+      dnac_username: "{{dnac_username}}"
+      dnac_password: "{{dnac_password}}"
+      dnac_verify: "{{dnac_verify}}"
+      dnac_port: "{{dnac_port}}"
+      dnac_version: "{{dnac_version}}"
+      family: "Switches and Hubs"
+    register: result
+
+  - name: Show result
+    debug:
+      msg: "{{ result.dnac_response | json_query('response[*].{hostname: hostname, id: id}') }}"
