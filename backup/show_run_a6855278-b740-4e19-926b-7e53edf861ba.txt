@@ -1,0 +1,627 @@
+
+Building configuration...
+
+Current configuration : 21573 bytes
+!
+! Last configuration change at 11:06:55 UTC Thu Aug 12 2021
+!
+version 16.12
+no service pad
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+service call-home
+platform punt-keepalive disable-kernel-core
+!
+hostname P1D2-Edge2-C9300
+!
+!
+vrf definition Mgmt-vrf
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+enable secret 9 xxxxxxxx
+!
+aaa new-model
+!
+!
+aaa group server radius dnac-client-radius-group
+ server name dnac-radius_100.1.1.111
+ ip radius source-interface Loopback0
+!
+aaa authentication login default local
+aaa authentication login dnac-cts-list group dnac-client-radius-group local
+aaa authentication dot1x default group dnac-client-radius-group
+aaa authorization exec default local 
+aaa authorization network default group dnac-client-radius-group 
+aaa authorization network dnac-cts-list group dnac-client-radius-group 
+aaa accounting update newinfo periodic 2880
+aaa accounting identity default start-stop group dnac-client-radius-group
+!
+!
+!
+!
+!
+aaa server radius dynamic-author
+client 100.1.1.111 server-key 7 xxxxxxxx
+!
+aaa session-id common
+boot system switch all flash:cat9k_iosxe.16.12.04.SPA.conf
+switch 1 provision c9300-24t
+!
+!
+!
+!
+call-home
+ ! If contact email address in call-home is configured as sch-smart-licensing@cisco.com
+ ! the email address configured in Cisco Smart License Portal will be used as contact email address to send SCH notifications.
+ contact-email-addr sch-smart-licensing@cisco.com
+ profile "CiscoTAC-1"
+  active
+  destination transport-method http
+  no destination transport-method email
+ip routing
+!
+!
+!
+!
+!
+ip name-server 100.1.1.15
+ip domain name sdalab.local
+!
+!
+!
+login on-success log
+!
+!
+!
+!
+!
+!
+device-sensor filter-list lldp list iseLLDP
+ tlv name system-name
+ tlv name system-description
+ tlv name system-capabilities
+!
+device-sensor filter-list dhcp list iseDHCP
+ option name host-name
+ option name parameter-request-list
+ option name class-identifier
+!
+device-sensor filter-list cdp list iseCDP
+ tlv name device-name
+ tlv name capabilities-type
+ tlv name version-type
+ tlv name platform-type
+device-sensor filter-spec dhcp include list iseDHCP
+device-sensor filter-spec lldp include list iseLLDP
+device-sensor filter-spec cdp include list iseCDP
+device-sensor notify all-changes
+!
+!
+mpls label mode all-vrfs protocol all-afs per-vrf
+access-session attributes filter-list list Def_Acct_List
+ cdp
+ lldp
+ dhcp
+ http
+access-session accounting attributes filter-spec include list Def_Acct_List
+access-session mac-move deny
+access-session acl default passthrough
+no device-tracking logging theft
+device-tracking tracking
+!
+device-tracking policy IPDT_MAX_10
+ limit address-count 10
+ no protocol udp
+ tracking enable
+!
+!
+crytpo pki xxxxxxx
+ enrollment pkcs12
+ revocation-check crl
+!
+crytpo pki xxxxxxx
+ enrollment selfsigned
+certificate xxxx
+ revocation-check none
+ rsakeypair TP-self-signed- xxxxxxxx
+!
+crytpo pki xxxxxxx
+ enrollment mode ra
+ enrollment terminal
+ usage ssl-client
+ revocation-check crl none
+ source interface Loopback0
+!
+!
+certificate xxxx
+certificate xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+quit
+certificate xxxx
+certificate xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+quit
+certificate xxxx
+certificate xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+xxxx  xxxxx  xxxx  xxxx  xxxx
+quit
+!
+no cts server test all enable
+cts authorization list dnac-cts-list
+!
+service-template webauth-global-inactive
+ inactivity-timer 3600 
+service-template DEFAULT_LINKSEC_POLICY_MUST_SECURE
+ linksec policy must-secure
+service-template DEFAULT_LINKSEC_POLICY_SHOULD_SECURE
+ linksec policy should-secure
+service-template DEFAULT_CRITICAL_VOICE_TEMPLATE
+ voice vlan
+service-template DEFAULT_CRITICAL_DATA_TEMPLATE
+dot1x system-auth-control
+dot1x critical eapol
+system mtu 9100
+license boot level network-advantage addon dna-advantage
+!
+!
+diagnostic bootup level minimal
+!
+spanning-tree mode rapid-pvst
+spanning-tree extend system-id
+archive
+ path ftp://10.124.38.158/dlc-sda-lab-config-archive/P1D2-Edge2-C9300/
+ write-memory
+ time-period 1440
+memory free low-watermark processor 134344
+!
+username xxxxxxxx 
+!
+redundancy
+ mode sso
+!
+!
+!
+!
+!
+transceiver type all
+ monitoring
+!
+lldp run
+!
+!
+class-map match-any system-cpp-police-ewlc-control
+  description EWLC Control 
+class-map match-any system-cpp-police-topology-control
+  description Topology control
+class-map match-any system-cpp-police-sw-forward
+  description Sw forwarding, L2 LVX data packets, LOGGING, Transit Traffic
+class-map match-any system-cpp-default
+  description EWLC Data, Inter FED Traffic 
+class-map match-any system-cpp-police-sys-data
+  description Openflow, Exception, EGR Exception, NFL Sampled Data, RPF Failed
+class-map match-any system-cpp-police-punt-webauth
+  description Punt Webauth
+class-map match-any system-cpp-police-l2lvx-control
+  description L2 LVX control packets
+class-map match-any system-cpp-police-forus
+  description Forus Address resolution and Forus traffic
+class-map match-any system-cpp-police-multicast-end-station
+  description MCAST END STATION
+class-map match-any system-cpp-police-high-rate-app
+  description High Rate Applications 
+class-map match-any system-cpp-police-multicast
+  description MCAST Data
+class-map match-any system-cpp-police-l2-control
+  description L2 control
+class-map match-any system-cpp-police-dot1x-auth
+  description DOT1X Auth
+class-map match-any system-cpp-police-data
+  description ICMP redirect, ICMP_GEN and BROADCAST
+class-map match-any system-cpp-police-stackwise-virt-control
+  description Stackwise Virtual OOB
+class-map match-any non-client-nrt-class
+class-map match-any system-cpp-police-routing-control
+  description Routing control and Low Latency
+class-map match-any system-cpp-police-protocol-snooping
+  description Protocol snooping
+class-map match-any system-cpp-police-dhcp-snooping
+  description DHCP snooping
+class-map match-any system-cpp-police-ios-routing
+  description L2 control, Topology control, Routing control, Low Latency
+class-map match-any system-cpp-police-system-critical
+  description System Critical and Gold Pkt
+class-map match-any system-cpp-police-ios-feature
+  description ICMPGEN,BROADCAST,ICMP,L2LVXCntrl,ProtoSnoop,PuntWebauth,MCASTData,Transit,DOT1XAuth,Swfwd,LOGGING,L2LVXData,ForusTraffic,ForusARP,McastEndStn,Openflow,Exception,EGRExcption,NflSampled,RpfFailed
+!
+!
+policy-map system-cpp-policy
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ ip address 172.16.0.20 255.255.255.255
+ ip router isis 
+!
+interface GigabitEthernet0/0
+ vrf forwarding Mgmt-vrf
+ ip address 10.124.38.218 255.255.255.0
+ negotiation auto
+!
+interface GigabitEthernet1/0/1
+ device-tracking attach-policy IPDT_MAX_10
+!
+interface GigabitEthernet1/0/2
+ device-tracking attach-policy IPDT_MAX_10
+!
+interface GigabitEthernet1/0/3
+ device-tracking attach-policy IPDT_MAX_10
+!
+interface GigabitEthernet1/0/4
+ device-tracking attach-policy IPDT_MAX_10
+!
+interface GigabitEthernet1/0/5
+ device-tracking attach-policy IPDT_MAX_10
+!
+interface GigabitEthernet1/0/6
+ device-tracking attach-policy IPDT_MAX_10
+!
+interface GigabitEthernet1/0/7
+ device-tracking attach-policy IPDT_MAX_10
+!
+interface GigabitEthernet1/0/8
+ device-tracking attach-policy IPDT_MAX_10
+!
+interface GigabitEthernet1/0/9
+ device-tracking attach-policy IPDT_MAX_10
+!
+interface GigabitEthernet1/0/10
+ device-tracking attach-policy IPDT_MAX_10
+!
+interface GigabitEthernet1/0/11
+ device-tracking attach-policy IPDT_MAX_10
+!
+interface GigabitEthernet1/0/12
+ device-tracking attach-policy IPDT_MAX_10
+!
+interface GigabitEthernet1/0/13
+ device-tracking attach-policy IPDT_MAX_10
+!
+interface GigabitEthernet1/0/14
+ device-tracking attach-policy IPDT_MAX_10
+!
+interface GigabitEthernet1/0/15
+ device-tracking attach-policy IPDT_MAX_10
+!
+interface GigabitEthernet1/0/16
+ device-tracking attach-policy IPDT_MAX_10
+!
+interface GigabitEthernet1/0/17
+ device-tracking attach-policy IPDT_MAX_10
+!
+interface GigabitEthernet1/0/18
+ device-tracking attach-policy IPDT_MAX_10
+!
+interface GigabitEthernet1/0/19
+ device-tracking attach-policy IPDT_MAX_10
+!
+interface GigabitEthernet1/0/20
+ device-tracking attach-policy IPDT_MAX_10
+!
+interface GigabitEthernet1/0/21
+ device-tracking attach-policy IPDT_MAX_10
+!
+interface GigabitEthernet1/0/22
+ device-tracking attach-policy IPDT_MAX_10
+!
+interface GigabitEthernet1/0/23
+ device-tracking attach-policy IPDT_MAX_10
+!
+interface GigabitEthernet1/0/24
+ description Fabric Physical Link connect to Static-Edge-9300
+ no switchport
+ ip address 172.16.1.98 255.255.255.252
+ ip router isis 
+ isis network point-to-point 
+!
+interface GigabitEthernet1/1/1
+ device-tracking attach-policy IPDT_MAX_10
+!
+interface GigabitEthernet1/1/2
+ device-tracking attach-policy IPDT_MAX_10
+!
+interface GigabitEthernet1/1/3
+ device-tracking attach-policy IPDT_MAX_10
+!
+interface GigabitEthernet1/1/4
+ device-tracking attach-policy IPDT_MAX_10
+!
+interface TenGigabitEthernet1/1/1
+ device-tracking attach-policy IPDT_MAX_10
+!
+interface TenGigabitEthernet1/1/2
+ device-tracking attach-policy IPDT_MAX_10
+!
+interface TenGigabitEthernet1/1/3
+ device-tracking attach-policy IPDT_MAX_10
+!
+interface TenGigabitEthernet1/1/4
+ device-tracking attach-policy IPDT_MAX_10
+!
+interface TenGigabitEthernet1/1/5
+ device-tracking attach-policy IPDT_MAX_10
+!
+interface TenGigabitEthernet1/1/6
+ device-tracking attach-policy IPDT_MAX_10
+!
+interface TenGigabitEthernet1/1/7
+ device-tracking attach-policy IPDT_MAX_10
+!
+interface TenGigabitEthernet1/1/8
+ device-tracking attach-policy IPDT_MAX_10
+!
+interface FortyGigabitEthernet1/1/1
+ device-tracking attach-policy IPDT_MAX_10
+!
+interface FortyGigabitEthernet1/1/2
+ device-tracking attach-policy IPDT_MAX_10
+!
+interface TwentyFiveGigE1/1/1
+ device-tracking attach-policy IPDT_MAX_10
+!
+interface TwentyFiveGigE1/1/2
+ device-tracking attach-policy IPDT_MAX_10
+!
+interface AppGigabitEthernet1/0/1
+ device-tracking attach-policy IPDT_MAX_10
+!
+interface Vlan1
+ no ip address
+!
+router isis
+ net 49.0000.1720.1600.0020.00
+ metric-style wide
+ log-adjacency-changes
+ nsf ietf
+!
+ip forward-protocol nd
+ip http server
+ip http authentication local
+ip http secure-server
+ip http max-connections 16
+ip http client source-interface Loopback0
+ip ftp source-interface GigabitEthernet0/0
+ip route vrf Mgmt-vrf 0.0.0.0 0.0.0.0 10.124.38.1
+ip ssh source-interface Loopback0
+ip ssh version 2
+!
+!
+ip access-list extended ACL_WEBAUTH_REDIRECT
+ 50 deny   ip any host 100.1.1.111
+ 500 permit tcp any any eq www
+ 600 permit tcp any any eq 443
+ 700 permit tcp any any eq 8443
+ 800 deny   udp any any eq domain
+ 900 deny   udp any eq bootpc any eq bootps
+!
+ip radius source-interface Loopback0 
+logging host 100.1.1.10
+!
+!
+snmp-server group default v3 priv 
+snmp-server enable traps snmp authentication linkdown linkup coldstart warmstart
+snmp-server enable traps flowmon
+snmp-server enable traps entity-perf throughput-notif
+snmp-server enable traps call-home message-send-fail server-fail
+snmp-server enable traps tty
+snmp-server enable traps ospf state-change
+snmp-server enable traps ospf errors
+snmp-server enable traps ospf retransmit
+snmp-server enable traps ospf lsa
+snmp-server enable traps ospf cisco-specific state-change nssa-trans-change
+snmp-server enable traps ospf cisco-specific state-change shamlink interface
+snmp-server enable traps ospf cisco-specific state-change shamlink neighbor
+snmp-server enable traps ospf cisco-specific errors
+snmp-server enable traps ospf cisco-specific retransmit
+snmp-server enable traps ospf cisco-specific lsa
+snmp-server enable traps eigrp
+snmp-server enable traps auth-framework sec-violation
+snmp-server enable traps rep
+snmp-server enable traps vtp
+snmp-server enable traps vlancreate
+snmp-server enable traps vlandelete
+snmp-server enable traps port-security
+snmp-server enable traps license
+snmp-server enable traps smart-license
+snmp-server enable traps cpu threshold
+snmp-server enable traps memory bufferpeak
+snmp-server enable traps stackwise
+snmp-server enable traps udld link-fail-rpt
+snmp-server enable traps udld status-change
+snmp-server enable traps fru-ctrl
+snmp-server enable traps flash insertion removal lowspace
+snmp-server enable traps energywise
+snmp-server enable traps power-ethernet police
+snmp-server enable traps entity
+snmp-server enable traps pw vc
+snmp-server enable traps mvpn
+snmp-server enable traps envmon
+snmp-server enable traps cef resource-failure peer-state-change peer-fib-state-change inconsistency
+snmp-server enable traps lisp
+snmp-server enable traps isis
+snmp-server enable traps ipsla
+snmp-server enable traps entity-diag boot-up-fail hm-test-recover hm-thresh-reached scheduled-test-fail
+snmp-server enable traps bfd
+snmp-server enable traps ike policy add
+snmp-server enable traps ike policy delete
+snmp-server enable traps ike tunnel start
+snmp-server enable traps ike tunnel stop
+snmp-server enable traps ipsec cryptomap add
+snmp-server enable traps ipsec cryptomap delete
+snmp-server enable traps ipsec cryptomap attach
+snmp-server enable traps ipsec cryptomap detach
+snmp-server enable traps ipsec tunnel start
+snmp-server enable traps ipsec tunnel stop
+snmp-server enable traps ipsec too-many-sas
+snmp-server enable traps config-copy
+snmp-server enable traps config
+snmp-server enable traps config-ctid
+snmp-server enable traps dhcp
+snmp-server enable traps event-manager
+snmp-server enable traps hsrp
+snmp-server enable traps ipmulticast
+snmp-server enable traps msdp
+snmp-server enable traps ospfv3 state-change
+snmp-server enable traps ospfv3 errors
+snmp-server enable traps pim neighbor-change rp-mapping-change invalid-pim-message
+snmp-server enable traps bridge newroot topologychange
+snmp-server enable traps stpx inconsistency root-inconsistency loop-inconsistency
+snmp-server enable traps syslog
+snmp-server enable traps bgp cbgp2
+snmp-server enable traps nhrp nhs
+snmp-server enable traps nhrp nhc
+snmp-server enable traps nhrp nhp
+snmp-server enable traps nhrp quota-exceeded
+snmp-server enable traps mpls rfc ldp
+snmp-server enable traps mpls ldp
+snmp-server enable traps mpls rfc traffic-eng
+snmp-server enable traps mpls traffic-eng
+snmp-server enable traps mpls fast-reroute protected
+snmp-server enable traps local-auth
+snmp-server enable traps vlan-membership
+snmp-server enable traps errdisable
+snmp-server enable traps rf
+snmp-server enable traps transceiver all
+snmp-server enable traps bulkstat collection transfer
+snmp-server enable traps mac-notification change move threshold
+snmp-server enable traps vrfmib vrf-up vrf-down vnet-trunk-up vnet-trunk-down
+snmp-server enable traps mpls vpn
+snmp-server enable traps mpls rfc vpn
+snmp-server host 100.1.1.10 version 2c xxxxxxxx 
+!
+radius-server attribute 6 on-for-login-auth
+radius-server attribute 6 support-multiple
+radius-server attribute 8 include-in-access-req
+radius-server attribute 25 access-request include
+radius-server attribute 31 mac format ietf upper-case
+radius-server attribute 31 send nas-port-detail mac-only
+radius-server dead-criteria time 5 tries 3
+radius-server deadtime 3
+!
+radius server dnac-radius_100.1.1.111
+ address ipv4 100.1.1.111 auth-port 1812 acct-port 1813
+ timeout 4
+ retransmit 3
+ pac key 7 070C285F4D06
+!
+!
+control-plane
+ service-policy input system-cpp-policy
+!
+!
+line con 0
+ exec-timeout 0 0
+ stopbits 1
+line vty 5 15
+!
+ntp server vrf Mgmt-vrf time-pnp.cisco.com.
+ntp server vrf Mgmt-vrf pool.ntp.org
+!
+!
+!
+!
+!
+!
+end
+
