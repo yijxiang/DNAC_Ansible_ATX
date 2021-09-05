@@ -1,5 +1,6 @@
 ---
-- hosts: dnac_servers
+- name: 从DNAC获取配置信息和设备uuid信息
+  hosts: dnac_servers
   vars_files:
     - credentials.yml
   gather_facts: no
@@ -55,10 +56,15 @@
     local_action: copy content="{{ item.dnac_response.response }}" dest="backup/show_run_{{ item.item }}.txt"
     with_items: "{{ config_list }}"
 
+- name: COMMIT CONFIGURATION CHANGES TO GIT
+  hosts: localhost
+  connection: local
+  tags: git
+
+  tasks:
   - name: Sync Changes into Git repo
     command: "{{ item }}"
-    delegate_to: localhost
     with_items:
       - 'git add --all'
-      - 'git commit -m "Updates config from ansible auto"'
+      - 'git commit -m "Updates config from ansible auto at {{ ansible_date_time.date }}"'
       - 'git push origin main'
