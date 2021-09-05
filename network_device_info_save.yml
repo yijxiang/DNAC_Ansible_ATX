@@ -59,6 +59,6 @@
     command: "{{ item }}"
     delegate_to: localhost
     with_items:
-      - git add backup/.*
-      - git commit -m "Updates config from ansible auto"
-      - git push origin main
+      - 'git add --all'
+      - 'git commit -m "Updates config from ansible auto"'
+      - 'git push origin main'
