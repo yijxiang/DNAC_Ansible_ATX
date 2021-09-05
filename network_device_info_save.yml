@@ -23,3 +23,8 @@
   - name: Show Json Query
     debug:
       var: hostname_id
+    
+  - name: SAVE config to file
+    copy:
+        content: "{{ output_router.stdout[0] }}"
+        dest: "/home/ubuntu/cisco-backups/show_run_{{ inventory_hostname }}.txt"
