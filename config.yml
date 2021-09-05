@@ -1,0 +1,22 @@
+---
+- hosts: dnac_servers
+  vars_files:
+    - credentials.yml
+  gather_facts: no
+  tasks:
+  - name: get all config file
+    cisco.dnac.network_device_config_info:
+      dnac_host: "{{dnac_host}}"
+      dnac_username: "{{dnac_username}}"
+      dnac_password: "{{dnac_password}}"
+      dnac_verify: "{{dnac_verify}}"
+      dnac_port: "{{dnac_port}}"
+      dnac_version: "{{dnac_version}}"
+      networkDeviceId: "{{ item }}" 
+    register: result
+    with_items:
+            - a6855278-b740-4e19-926b-7e53edf861ba
+
+  - name: Show result
+    debug:
+      msg: "{{ result }}"
