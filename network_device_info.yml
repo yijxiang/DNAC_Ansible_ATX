@@ -4,7 +4,7 @@
     - credentials.yml
   gather_facts: no
   tasks:
-  - name: Get Network Devices
+  - name: Get all network device info for this family - switches
     cisco.dnac.network_device_info:
       dnac_host: "{{dnac_host}}"
       dnac_username: "{{dnac_username}}"
@@ -12,8 +12,9 @@
       dnac_verify: "{{dnac_verify}}"
       dnac_port: "{{dnac_port}}"
       dnac_version: "{{dnac_version}}"
-      dnac_debug: "{{dnac_debug}}"
-    register: network_devices_result
-  - name: "Ansible | List all known variables and facts"
+      family: "Switches and Hubs"
+    register: result
+
+  - name: Show result
     debug:
-      var: hostvars[inventory_hostname]
+      msg: "{{ result.dnac_response | json_query('response[*].{hostname: hostname, id: id}') }}"
