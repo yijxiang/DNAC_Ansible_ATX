@@ -1,5 +1,5 @@
 ---
-- name: 从DNAC获取配置信息和设备uuid信息
+- name: 从DNAC获取配置信息和设备uuid信息, demo test
   hosts: dnac_servers
   vars_files:
     - credentials.yml
