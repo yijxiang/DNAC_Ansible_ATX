@@ -1,0 +1,19 @@
+---
+- hosts: dnac_servers
+  vars_files:
+    - credentials.yml
+  gather_facts: no
+  tasks:
+  - name: 新创建 type area site
+    cisco.dnac.site_create:
+      dnac_host: "{{dnac_host}}"
+      dnac_username: "{{dnac_username}}"
+      dnac_password: "{{dnac_password}}"
+      dnac_verify: "{{dnac_verify}}"
+      dnac_port: "{{dnac_port}}"
+      dnac_version: "{{dnac_version}}"
+      type: area
+      site:
+        area:
+          name: ATX_ansible_area
+          parentName: Global
