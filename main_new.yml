@@ -1,5 +1,5 @@
 ---
-- name: 从DNAC获取配置信息和设备uuid信息, demo test
+- name: 从DNAC获取设备配置、以及设备的uuid
   hosts: dnac_servers
   vars_files:
     - credentials.yml
@@ -54,6 +54,8 @@
   - name: SAVE config to file
     local_action: copy content="{{ item.dnac_response.response }}" dest="backup/show_run_{{ item.item }}.txt"
     with_items: "{{ config_list }}"
+    loop_control:
+      label: "For device id: {{ item.item }}"
 
   - name: REMOVE CONFIG LINES WITH LIST
     lineinfile:
@@ -66,7 +68,7 @@
       - "{{ device_uuid }}"
 
 
-- name: 配置文件上传至远端服务器 - github
+- name: 配置备份文件同步到远端服务器 - Github
   hosts: localhost
   connection: local
   tags: git
@@ -80,17 +82,17 @@
     ignore_errors: true
     run_once: true
 
-  - name: debug output
-    debug:
-      msg: "{{ git_result }}"
+  # - name: debug output
+  #   debug:
+  #     msg: "{{ git_result }}"
 
-  - name: 如果文件没变化，则print - Git Dir clean - Nothing to commit
+  - name: 如果文件没变化，则仅仅显示信息“文件没有变化”
     debug:
       msg: "文件没有变化，不需要 git commit"
     when: not git_result.failed
     run_once: true
 
-  - name: 如果文件没变化，则upload GIT - COMMIT/PUSH ONLY IF WORKING DIRECTORY IS DIRTY
+  - name: 如果文件有变化，则同步到 Github
     shell: |
       git commit -m "Updates config from ansible auto at {{ ansible_date_time.date }}"
       git push origin main -f 
