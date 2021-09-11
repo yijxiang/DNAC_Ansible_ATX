@@ -15,5 +15,5 @@
       type: area
       site:
         area:
-          name: ATX_ansible_area
+          name: ATX_ansible_new_area
           parentName: Global

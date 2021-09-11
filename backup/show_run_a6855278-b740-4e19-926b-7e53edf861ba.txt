@@ -1,9 +1,7 @@
 
 Building configuration...
 
-Current configuration : 21605 bytes
 !
-! Last configuration change at 02:37:58 UTC Mon Sep 6 2021 by sdaadmin
 !
 version 16.12
 no service pad
@@ -497,7 +495,6 @@ ip access-list extended ACL_WEBAUTH_REDIRECT
 !
 ip radius source-interface Loopback0 
 logging host 100.1.1.10
-logging host 1.1.1.1
 !
 !
 snmp-server group default v3 priv 

@@ -1,0 +1,80 @@
+---
+- name: 从DNAC获取配置信息和设备uuid信息, demo test
+  hosts: dnac_servers
+  vars_files:
+    - credentials.yml
+  gather_facts: no
+  tasks:
+  - name: Get all network device info for this family - switches
+    cisco.dnac.network_device_info:
+      dnac_host: "{{dnac_host}}"
+      dnac_username: "{{dnac_username}}"
+      dnac_password: "{{dnac_password}}"
+      dnac_verify: "{{dnac_verify}}"
+      dnac_port: "{{dnac_port}}"
+      dnac_version: "{{dnac_version}}"
+      family: "Switches and Hubs"
+    register: result
+
+  - name: Json Query
+    set_fact:
+      hostname_id:
+        "{{ result.dnac_response | json_query('response[*].{hostname: hostname, id: id}') }}"
+
+  # - name: Show Json Query
+  #   debug:
+  #     var: hostname_id
+
+  - name: Get config file for device with ID
+    cisco.dnac.network_device_config_info:
+      dnac_host: "{{dnac_host}}"
+      dnac_username: "{{dnac_username}}"
+      dnac_password: "{{dnac_password}}"
+      dnac_verify: "{{dnac_verify}}"
+      dnac_port: "{{dnac_port}}"
+      dnac_version: "{{dnac_version}}"
+      networkDeviceId: "{{ item }}" 
+    register: config_result
+    loop: "{{ device_uuid }}"
+
+  - name: set config var.
+    set_fact:
+      config_list:
+        "{{ config_result.results }}"
+
+  # - name: config list 原始信息
+  #   debug:
+  #     msg: "{{ config_list }}"
+
+  # - name: Show result
+  #   debug:
+  #     msg: "{{ item.dnac_response.response }}"
+  #   with_items: "{{ config_list }}"
+
+  - name: SAVE config to file
+    local_action: copy content="{{ item.dnac_response.response }}" dest="backup/show_run_{{ item.item }}.txt"
+    with_items: "{{ config_list }}"
+
+  - name: REMOVE CONFIG LINES WITH LIST
+    lineinfile:
+        path: "backup/show_run_{{ item.1 }}.txt"
+        state: absent
+        regexp: '^{{ item.0 }}'
+    delegate_to: localhost
+    with_nested: 
+      - "{{ lines_removed }}"
+      - "{{ device_uuid }}"
+
+
+- name: COMMIT CONFIGURATION CHANGES TO GIT
+  hosts: localhost
+  connection: local
+  tags: git
+
+  tasks:
+  - name: Sync Changes into Git repo
+    command: "{{ item }}"
+    with_items:
+      - 'git add --all'
+      - 'git commit -m "Updates config from ansible auto at {{ ansible_date_time.date }}"'
+      - 'git push origin main'
