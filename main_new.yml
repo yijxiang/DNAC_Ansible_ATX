@@ -66,15 +66,34 @@
       - "{{ device_uuid }}"
 
 
-- name: COMMIT CONFIGURATION CHANGES TO GIT
+- name: 配置文件上传至远端服务器 - github
   hosts: localhost
   connection: local
   tags: git
-
+  
   tasks:
-  - name: Sync Changes into Git repo
-    command: "{{ item }}"
-    with_items:
-      - 'git add --all'
-      - 'git commit -m "Updates config from ansible auto at {{ ansible_date_time.date }}"'
-      - 'git push origin main'
+  - name: 文件更新至local git repo，检查是否有变化
+    shell: |
+      git add --all
+      git diff-index --quiet HEAD --;
+    register: git_result
+    ignore_errors: true
+    run_once: true
+
+  - name: debug output
+    debug:
+      msg: "{{ git_result }}"
+
+  - name: 如果文件没变化，则print - Git Dir clean - Nothing to commit
+    debug:
+      msg: "文件没有变化，不需要 git commit"
+    when: not git_result.failed
+    run_once: true
+
+  - name: 如果文件没变化，则upload GIT - COMMIT/PUSH ONLY IF WORKING DIRECTORY IS DIRTY
+    shell: |
+      git commit -m "Updates config from ansible auto at {{ ansible_date_time.date }}"
+      git push origin main -f 
+    register: gitcommit_result
+    run_once: true
+    when: git_result.failed
