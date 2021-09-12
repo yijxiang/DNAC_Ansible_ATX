@@ -4,7 +4,7 @@
     - credentials.yml
   gather_facts: no
   tasks:
-  - name: Create tag with name "MyNewTag"
+  - name: show all tags
     cisco.dnac.tag_info:
       dnac_host: "{{dnac_host}}"
       dnac_username: "{{dnac_username}}"

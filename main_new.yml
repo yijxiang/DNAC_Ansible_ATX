@@ -72,6 +72,7 @@
   hosts: localhost
   connection: local
   tags: git
+  ignore_errors: true
   
   tasks:
   - name: 文件更新至local git repo，检查是否有变化
@@ -79,7 +80,6 @@
       git add --all
       git diff-index --quiet HEAD --;
     register: git_result
-    ignore_errors: true
     run_once: true
 
   # - name: debug output

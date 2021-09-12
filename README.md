@@ -11,22 +11,23 @@
 
 ### Ansible 配置
 
-密码、用户名等配置请修改文件 *credentials.yml* ，建议现在测试环境中测试和试用 ansible playbook，如果密码敏感，则需要使用Ansible vault。
+密码、用户名等配置请修改文件 *credential_sample_.yml* 并更改为名称 -> *credentials.yml* ，该名称将在后续playbook中调用，建议在测试环境中测试使用 ansible playbook，之后在生产环境中实践。
+
+如果密码敏感，则推荐使用Ansible vault。
 
 
 ### Ansible Playbook 命令使用方法
 
 ansible-playbook -i hosts main.yml
 
-其中 *main.yml* 文件替换为其他playbook.yml即可。
-
+其中 *main.yml* 文件替换为其他playbook.yml即可测试。
 
 main.yml playbook 实现几个任务：
-- 从DNAC中获取交换机的资产信息；
+- 从DNAC中获取所有其平台为交换机的资产信息；
 - 保存交换机hostname、uuid 至变量；
-- 从DNAC中获取指定的交换机的配置；
-- 保存该交换机的配置到backup目录；
-- 通过GIT 同步文件至remote github；
+- 从DNAC中获取指定交换机的配置；
+- 并保存该交换机的配置到backup目录；
+- 如果有变化，则通过GIT 更新同步文件至remote github；
 
 
 
