@@ -1,5 +1,5 @@
 ---
-- name: 从DNAC获取配置信息和设备uuid信息, demo test
+- name: 从DNAC获取设备配置、以及设备的 uuid
   hosts: dnac_servers
   vars_files:
     - credentials.yml
@@ -35,8 +35,7 @@
       dnac_version: "{{dnac_version}}"
       networkDeviceId: "{{ item }}" 
     register: config_result
-    with_items:
-            - a6855278-b740-4e19-926b-7e53edf861ba
+    loop: "{{ device_uuid }}"
 
   - name: set config var.
     set_fact:
@@ -55,16 +54,48 @@
   - name: SAVE config to file
     local_action: copy content="{{ item.dnac_response.response }}" dest="backup/show_run_{{ item.item }}.txt"
     with_items: "{{ config_list }}"
+    loop_control:
+      label: "For device id: {{ item.item }}"
 
-- name: COMMIT CONFIGURATION CHANGES TO GIT
+  - name: REMOVE CONFIG LINES WITH LIST
+    lineinfile:
+        path: "backup/show_run_{{ item.1 }}.txt"
+        state: absent
+        regexp: '^{{ item.0 }}'
+    delegate_to: localhost
+    with_nested: 
+      - "{{ lines_removed }}"
+      - "{{ device_uuid }}"
+
+
+- name: 配置备份文件同步到远端服务器 - Github
   hosts: localhost
   connection: local
   tags: git
-
+  ignore_errors: true
+  
   tasks:
-  - name: Sync Changes into Git repo
-    command: "{{ item }}"
-    with_items:
-      - 'git add --all'
-      - 'git commit -m "Updates config from ansible auto at {{ ansible_date_time.date }}"'
-      - 'git push origin main'
+  - name: 文件更新至local git repo，检查是否有变化
+    shell: |
+      git add --all
+      git diff-index --quiet HEAD --;
+    register: git_result
+    run_once: true
+
+  # - name: debug output
+  #   debug:
+  #     msg: "{{ git_result }}"
+
+  - name: 如果文件没变化，则仅仅显示信息“文件没有变化”
+    debug:
+      msg: "文件没有变化，不需要 git commit"
+    when: not git_result.failed
+    run_once: true
+
+  - name: 如果文件有变化，则同步到 Github
+    shell: |
+      git commit -m "Updates config from ansible auto at {{ ansible_date_time.date }}"
+      git push origin main -f 
+    register: gitcommit_result
+    run_once: true
+    when: git_result.failed
