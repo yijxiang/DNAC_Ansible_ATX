@@ -1,7 +1,7 @@
 ---
 - hosts: dnac_servers
   vars_files:
-    - credentials.yml
+    - credentials1.yml
   gather_facts: no
   tasks:
   - name: Get all network device info for this family - switches
