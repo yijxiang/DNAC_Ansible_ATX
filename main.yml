@@ -1,5 +1,5 @@
 ---
-- name: 从DNAC获取设备配置、以及设备的 uuid
+- name: 从DNAC获取设备配置、以及设备的uuid
   hosts: dnac_servers
   vars_files:
     - credentials.yml
