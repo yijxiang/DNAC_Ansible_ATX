@@ -1,0 +1,9 @@
+{
+    "type": "area",
+    "site": {
+        "area": {
+            "name": "ATX_new_platform_api",
+            "parentName": "Global"
+        }
+    }
+}
