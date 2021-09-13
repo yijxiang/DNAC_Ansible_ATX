@@ -2,18 +2,19 @@
 
 主要是演示Cisco DNA center 与 Ansible互操作。
 
-### Python、Ansible 准备工作
+### Python、Ansible、Git 准备工作
 
 - 在部署ansible之前，请首先完成python的安装，具体方法请参考 [ python on ubuntu ](https://github.com/yijxiang/python-on-ubuntu)
 - 创建、并进入Python 虚拟环境 [ Python Virtual Env. ]( https://github.com/yijxiang/python-on-ubuntu/blob/main/Python%20%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%20-%20venv.md)
 - Ansible安装请参考 [ dnac_ansible 使用和安装方法 ](https://github.com/yijxiang/python-on-ubuntu/blob/main/dnac_ansible%20%E4%BD%BF%E7%94%A8%E5%92%8C%E5%AE%89%E8%A3%85%E6%96%B9%E6%B3%95.md)
+- 本地安装好*GIT* 软件，并可以使用 git push 到 remote github server (Gitlab类似)
 
+### ATX demo repo 使用方法
 
-### Ansible 配置
+在项目目录下，运行 **git clone** 复制项目到本地
+- git clone https://github.com/yijxiang/DNAC_Ansible_ATX.git
 
-密码、用户名等配置请修改文件 *credential_sample_.yml* 并更改文件名为 -> *credentials.yml* ，该名称将在后续playbook中调用，建议在测试环境中测试使用 ansible playbook，之后在生产环境中实践。
-
-如果密码敏感，则推荐使用Ansible vault。
+进入到 *git clone*过程新创建的目录下。
 
 
 ### 目录、文件说明
@@ -34,14 +35,20 @@ main.yml |  playbook：用于抓取设备配置，并保存到git repo中，可�
 backup |  本地设备配置保存目录
 
 
+### Ansible 配置
+
+密码、用户名等配置请修改文件 *credential_sample_.yml* 并更改文件名为 -> *credentials.yml* ，该名称将在后续playbook中调用，建议在测试环境中测试使用 ansible playbook，之后在生产环境中实践。
+
+如果密码敏感，则推荐使用Ansible vault。
+
 
 ### Ansible Playbook 命令使用方法
 
 ansible-playbook -i hosts main.yml
 
-其中 *main.yml* 文件替换为其他playbook.yml即可进行测试。
+其中 *main.yml* 文件替换为其他*playbook.yml*即可进行测试。
 
-main.yml playbook 实现几个任务：
+ATX DEMO 中演示的 main.yml playbook 实现几个任务：
 - 从DNAC中获取所有其平台为交换机的资产信息；
 - 保存交换机hostname、uuid 至变量；
 - 从DNAC中获取指定交换机的配置；
