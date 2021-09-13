@@ -9,6 +9,9 @@
 - Ansible安装请参考 [ dnac_ansible 使用和安装方法 ](https://github.com/yijxiang/python-on-ubuntu/blob/main/dnac_ansible%20%E4%BD%BF%E7%94%A8%E5%92%8C%E5%AE%89%E8%A3%85%E6%96%B9%E6%B3%95.md)
 - 本地安装好*GIT* 软件，并可以使用 git push 到 remote github server (Gitlab类似)
 
+Git remote repo 建议使用SSH模式下载和更新上传，利用预先设置 SSH key 实现远程repo的同步操作。
+
+
 ### ATX demo repo 使用方法
 
 在项目目录下，运行 **git clone** 复制项目到本地
@@ -63,5 +66,5 @@ ATX DEMO 中演示的 main.yml playbook 实现几个任务：
 - [ Github 源代码 ](https://github.com/cisco-en-programmability/dnacenter-ansible)
 - [ DNA Center Ansible documentation ](https://cisco-en-programmability.github.io/dnacenter-ansible/main/index.html)
 - [ Ansible Modules for DNA Center 开发者指南 ](https://developer.cisco.com/docs/dna-center/?utm_campaign=dnac-padm&utm_source=padm-ww&utm_medium=dnac-blog-docs#!ansible)
-
+- [ Config backup with Ansible + Git ](https://nwmichl.net/2020/03/09/configbackup-with-ansible-git/)
 
