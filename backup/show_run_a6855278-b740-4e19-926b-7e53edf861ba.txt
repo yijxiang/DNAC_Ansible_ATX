@@ -494,6 +494,7 @@ ip access-list extended ACL_WEBAUTH_REDIRECT
  900 deny   udp any eq bootpc any eq bootps
 !
 ip radius source-interface Loopback0 
+logging host 1.1.1.1
 logging host 100.1.1.10
 !
 !
