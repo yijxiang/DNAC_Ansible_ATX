@@ -1,5 +1,5 @@
 ---
-- name: 从DNAC获取设备配置、以及设备的uuid
+- name: 从DNAC获取设备配置、以及设备的uuid，demo playbook 1
   hosts: dnac_servers
   vars_files:
     - credentials.yml
@@ -68,7 +68,7 @@
       - "{{ device_uuid }}"
 
 
-- name: 配置备份文件同步到远端服务器 - Github
+- name: 配置备份文件同步到远端服务器 - Github，demo playbook 2
   hosts: localhost
   connection: local
   tags: git
