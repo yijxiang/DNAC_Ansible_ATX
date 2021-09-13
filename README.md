@@ -51,7 +51,10 @@ main.yml playbook 实现几个任务：
 
 ### 参考链接
 
+
 - [Ansible Modules for Cisco DNA Center ](https://galaxy.ansible.com/cisco/dnac)
-- [ Github 源代码 ](https://github.com/cisco-en-programmability/dnacenter-ansible​)
-- [ DNA Center Ansible Actions’ documentation ](https://cisco-en-programmability.github.io/dnacenter-ansible/main/index.html​)
-- [ Ansible Modules for DNA Center 开发者指南 ]( https://developer.cisco.com/docs/dna-center/?utm_campaign=dnac-padm&utm_source=padm-ww&utm_medium=dnac-blog-docs#!ansible​ )
+- [ Github 源代码 ](https://github.com/cisco-en-programmability/dnacenter-ansible)
+- [ DNA Center Ansible documentation ](https://cisco-en-programmability.github.io/dnacenter-ansible/main/index.html)
+- [ Ansible Modules for DNA Center 开发者指南 ](https://developer.cisco.com/docs/dna-center/?utm_campaign=dnac-padm&utm_source=padm-ww&utm_medium=dnac-blog-docs#!ansible)
+
+
