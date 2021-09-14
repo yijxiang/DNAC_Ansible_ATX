@@ -9,13 +9,15 @@
 - Ansible安装请参考 [ dnac_ansible 使用和安装方法 ](https://github.com/yijxiang/python-on-ubuntu/blob/main/dnac_ansible%20%E4%BD%BF%E7%94%A8%E5%92%8C%E5%AE%89%E8%A3%85%E6%96%B9%E6%B3%95.md)
 - 本地安装好*GIT* 软件，并可以使用 git push 到 remote github server (Gitlab类似)
 
-Git remote repo 建议使用SSH模式下载和更新上传，利用预先设置 SSH key 实现远程repo的同步操作。
+Git remote repo 建议使用**SSH**模式下载和更新上传，利用预先设置 SSH key 可以很方便实现远程repo的同步操作。
 
 
 ### ATX demo repo 使用方法
 
-在项目目录下，运行 **git clone** 复制项目到本地
-- git clone https://github.com/yijxiang/DNAC_Ansible_ATX.git
+- Fork 到自己的 github 中；
+- 在本地电脑的项目目录下，运行 **git clone** 复制项目到本地
+
+  git clone *git@github.com:yijxiang/DNAC_Ansible_ATX.git* : git clone **url-of-your-fork-repo** 请修改为自己fork来的链接。因为main.yml 中将执行*git push*操作，需要对remote repo 有**读写**权限。
 
 进入到 *git clone*过程新创建的目录下。
 
